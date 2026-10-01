@@ -539,3 +539,29 @@ input::placeholder {
     display: none;
   }
 }
+
+/* ========================================
+   PRINT STYLES FOR COUNTER STICKERS
+   ======================================== */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .printable-sticker-container, .printable-sticker-container * {
+    visibility: visible !important;
+  }
+  .printable-sticker-container {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 4in !important;
+    height: 3in !important;
+    margin: 0 !important;
+    padding: 0.25in !important;
+    box-shadow: none !important;
+    border: 2px solid #0a2540 !important;
+    background: #ffffff !important;
+    color: #0a2540 !important;
+    z-index: 99999 !important;
+  }
+}

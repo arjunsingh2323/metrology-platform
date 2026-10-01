@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { subscribeToAuthChanges, logoutUser } from '../lib/auth.service';
+import { subscribeToAuthChanges, logoutUser, setSessionProfile } from '../lib/auth.service';
 
 const AuthContext = createContext();
 
@@ -11,23 +11,42 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = subscribeToAuthChanges((user, profile) => {
-      setCurrentUser(user);
-      setUserProfile(profile);
+    let unsubscribe = () => {};
+    try {
+      unsubscribe = subscribeToAuthChanges((user, profile) => {
+        setCurrentUser(user);
+        setUserProfile(profile);
+        setLoading(false);
+      });
+    } catch (err) {
+      console.warn("AuthContext subscription exception:", err);
       setLoading(false);
-    });
+    }
 
-    return unsubscribe;
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
   }, []);
 
   const logout = () => {
     return logoutUser();
   };
 
+  const switchRoleProfile = (profileData) => {
+    const user = {
+      uid: profileData.uid || `demo-${profileData.role.toLowerCase()}-uid`,
+      email: profileData.email || `${profileData.role.toLowerCase()}@metrology.gov.in`
+    };
+    setCurrentUser(user);
+    setUserProfile(profileData);
+    setSessionProfile(user, profileData);
+  };
+
   const value = {
     currentUser,
     userProfile,
-    logout
+    logout,
+    switchRoleProfile
   };
 
   return (
