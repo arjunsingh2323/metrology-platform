@@ -6,6 +6,9 @@ import InstrumentsPage from './pages/Instruments';
 import InstrumentRegistrationForm from './pages/InstrumentRegistrationForm';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Verifications from './pages/Verifications';
+import UsersPage from './pages/Users';
+import SettingsPage from './pages/Settings';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Protected Route Component
@@ -17,75 +20,67 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Main Layout Component
+// Main Layout Component — Stripe-style horizontal navbar
 const Layout = ({ children }) => {
   const location = useLocation();
   const { userProfile, logout } = useAuth();
   
-  return (
-    <div className="app-container">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <Scale className="text-accent-primary" size={28} color="var(--accent-primary)" />
-          <span className="sidebar-brand">Metrik</span>
-        </div>
-        <nav className="sidebar-nav">
-          <Link to="/" className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}>
-            <LayoutDashboard size={20} />
-            Dashboard
-          </Link>
-          <Link to="/instruments" className={`nav-item ${location.pathname.startsWith('/instruments') ? 'active' : ''}`}>
-            <Scale size={20} />
-            Instruments
-          </Link>
-          <Link to="/verifications" className={`nav-item ${location.pathname.startsWith('/verifications') ? 'active' : ''}`}>
-            <FileCheck size={20} />
-            Verifications
-          </Link>
-          <Link to="/users" className={`nav-item ${location.pathname.startsWith('/users') ? 'active' : ''}`}>
-            <Users size={20} />
-            Users & Roles
-          </Link>
-          <Link to="/settings" className={`nav-item ${location.pathname.startsWith('/settings') ? 'active' : ''}`}>
-            <Settings size={20} />
-            Settings
-          </Link>
-        </nav>
-      </aside>
+  const navLinks = [
+    { to: '/', label: 'Dashboard', icon: <LayoutDashboard size={16} />, match: (p) => p === '/' },
+    { to: '/instruments', label: 'Instruments', icon: <Scale size={16} />, match: (p) => p.startsWith('/instruments') },
+    { to: '/verifications', label: 'Verifications', icon: <FileCheck size={16} />, match: (p) => p.startsWith('/verifications') },
+    { to: '/users', label: 'Users & Roles', icon: <Users size={16} />, match: (p) => p.startsWith('/users') },
+    { to: '/settings', label: 'Settings', icon: <Settings size={16} />, match: (p) => p.startsWith('/settings') },
+  ];
 
-      {/* Main Content */}
-      <main className="main-content">
-        <header className="topbar">
-          <div className="flex-center" style={{ gap: '1rem' }}>
-            <button className="btn-icon" style={{ display: 'none' }} id="menu-btn">
-              <Menu size={20} />
-            </button>
-            <div className="search-bar">
-              <Search size={16} className="text-muted" />
-              <input type="text" placeholder="Search records, IDs..." style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', outline: 'none', width: '100%' }} />
-            </div>
+  return (
+    <div className="app-layout">
+      {/* Top Navbar */}
+      <header className="stripe-navbar">
+        <div className="navbar-inner">
+          {/* Brand */}
+          <div className="navbar-brand">
+            <Scale size={22} color="var(--accent-primary)" />
+            <span className="brand-text">Metrik</span>
           </div>
-          
-          <div className="flex-center" style={{ gap: '1rem' }}>
+
+          {/* Nav Links */}
+          <nav className="navbar-links">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`navbar-link ${link.match(location.pathname) ? 'active' : ''}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Right Section */}
+          <div className="navbar-actions">
+            <div className="search-bar">
+              <Search size={14} className="text-muted" />
+              <input type="text" placeholder="Search..." style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', outline: 'none', width: '140px', fontSize: '0.8125rem' }} />
+            </div>
             <button className="btn-icon">
-              <Bell size={20} />
+              <Bell size={18} />
             </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingLeft: '1rem', borderLeft: '1px solid var(--border-color)' }}>
+            <div className="navbar-user">
               <div className="user-avatar">
                 {userProfile?.name ? userProfile.name.charAt(0).toUpperCase() : 'U'}
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--text-primary)' }}>{userProfile?.name || 'User'}</span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{userProfile?.role || 'Guest'}</span>
-              </div>
-              <button onClick={logout} style={{ marginLeft: '0.5rem', cursor: 'pointer', color: 'var(--accent-danger)' }} title="Logout">
-                <LogOut size={18} />
+              <span className="user-name">{userProfile?.name || 'User'}</span>
+              <button onClick={logout} className="btn-icon logout-btn" title="Logout">
+                <LogOut size={16} />
               </button>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
+      {/* Page Content */}
+      <main className="page-wrapper">
         <div className="page-content">
           {children}
         </div>
@@ -106,9 +101,9 @@ function App() {
           <Route path="/" element={<ProtectedRoute><Layout><AdminDashboard /></Layout></ProtectedRoute>} />
           <Route path="/instruments" element={<ProtectedRoute><Layout><InstrumentsPage /></Layout></ProtectedRoute>} />
           <Route path="/instruments/new" element={<ProtectedRoute><Layout><InstrumentRegistrationForm /></Layout></ProtectedRoute>} />
-          <Route path="/verifications" element={<ProtectedRoute><Layout><div className="animate-fade-in text-muted">Verifications Module Coming Soon</div></Layout></ProtectedRoute>} />
-          <Route path="/users" element={<ProtectedRoute><Layout><div className="animate-fade-in text-muted">User Management Coming Soon</div></Layout></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Layout><div className="animate-fade-in text-muted">Settings Coming Soon</div></Layout></ProtectedRoute>} />
+          <Route path="/verifications" element={<ProtectedRoute><Layout><Verifications /></Layout></ProtectedRoute>} />
+          <Route path="/users" element={<ProtectedRoute><Layout><UsersPage /></Layout></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Layout><SettingsPage /></Layout></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
