@@ -2,6 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { LayoutDashboard, Users, Scale, FileCheck, Settings, Bell, Search, Menu, LogOut } from 'lucide-react';
 import AdminDashboard from './pages/AdminDashboard';
+import InspectorDashboard from './pages/InspectorDashboard';
+import InspectionExecution from './pages/InspectionExecution';
+import TraderDashboard from './pages/TraderDashboard';
 import InstrumentsPage from './pages/Instruments';
 import InstrumentRegistrationForm from './pages/InstrumentRegistrationForm';
 import Login from './pages/Login';
@@ -9,6 +12,7 @@ import Signup from './pages/Signup';
 import Verifications from './pages/Verifications';
 import UsersPage from './pages/Users';
 import SettingsPage from './pages/Settings';
+import DemoSwitcher from './components/DemoSwitcher';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Protected Route Component
@@ -27,6 +31,8 @@ const Layout = ({ children }) => {
   
   const navLinks = [
     { to: '/', label: 'Dashboard', icon: <LayoutDashboard size={16} />, match: (p) => p === '/' },
+    { to: '/inspector', label: 'Inspector Queue', icon: <FileCheck size={16} />, match: (p) => p.startsWith('/inspector') },
+    { to: '/trader', label: 'Trader Portal', icon: <Scale size={16} />, match: (p) => p.startsWith('/trader') },
     { to: '/instruments', label: 'Instruments', icon: <Scale size={16} />, match: (p) => p.startsWith('/instruments') },
     { to: '/verifications', label: 'Verifications', icon: <FileCheck size={16} />, match: (p) => p.startsWith('/verifications') },
     { to: '/users', label: 'Users & Roles', icon: <Users size={16} />, match: (p) => p.startsWith('/users') },
@@ -85,6 +91,9 @@ const Layout = ({ children }) => {
           {children}
         </div>
       </main>
+
+      {/* Global Developer Quick Role Switcher */}
+      <DemoSwitcher />
     </div>
   );
 };
@@ -99,6 +108,10 @@ function App() {
           
           {/* Protected Routes wrapped in Layout */}
           <Route path="/" element={<ProtectedRoute><Layout><AdminDashboard /></Layout></ProtectedRoute>} />
+          <Route path="/inspector" element={<ProtectedRoute><Layout><InspectorDashboard /></Layout></ProtectedRoute>} />
+          <Route path="/trader" element={<ProtectedRoute><Layout><TraderDashboard /></Layout></ProtectedRoute>} />
+          <Route path="/inspect/:instrumentId" element={<ProtectedRoute><Layout><InspectionExecution /></Layout></ProtectedRoute>} />
+          <Route path="/inspection-execution/:instrumentId" element={<ProtectedRoute><Layout><InspectionExecution /></Layout></ProtectedRoute>} />
           <Route path="/instruments" element={<ProtectedRoute><Layout><InstrumentsPage /></Layout></ProtectedRoute>} />
           <Route path="/instruments/new" element={<ProtectedRoute><Layout><InstrumentRegistrationForm /></Layout></ProtectedRoute>} />
           <Route path="/verifications" element={<ProtectedRoute><Layout><Verifications /></Layout></ProtectedRoute>} />
