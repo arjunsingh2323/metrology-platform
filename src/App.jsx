@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Scale, FileCheck, Settings, Bell, Search, Menu, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Scale, FileCheck, Settings, Bell, Search, Menu, LogOut, Calculator, AlertCircle, Bot } from 'lucide-react';
 import AdminDashboard from './pages/AdminDashboard';
 import InspectorDashboard from './pages/InspectorDashboard';
 import InspectionExecution from './pages/InspectionExecution';
@@ -12,7 +12,12 @@ import Signup from './pages/Signup';
 import Verifications from './pages/Verifications';
 import UsersPage from './pages/Users';
 import SettingsPage from './pages/Settings';
+import UncertaintyCalculator from './pages/UncertaintyCalculator';
+import GrievancePortal from './pages/GrievancePortal';
+import GrievanceManagement from './pages/GrievanceManagement';
+import MetrologyAssistant from './pages/MetrologyAssistant';
 import DemoSwitcher from './components/DemoSwitcher';
+import MetrologyAiAssistant from './components/MetrologyAiAssistant';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Protected Route Component
@@ -35,6 +40,9 @@ const Layout = ({ children }) => {
     { to: '/trader', label: 'Trader Portal', icon: <Scale size={16} />, match: (p) => p.startsWith('/trader') },
     { to: '/instruments', label: 'Instruments', icon: <Scale size={16} />, match: (p) => p.startsWith('/instruments') },
     { to: '/verifications', label: 'Verifications', icon: <FileCheck size={16} />, match: (p) => p.startsWith('/verifications') },
+    { to: '/uncertainty-calculator', label: 'Uncertainty Calc', icon: <Calculator size={16} />, match: (p) => p.startsWith('/uncertainty-calculator') },
+    { to: '/complaints', label: 'Grievances', icon: <AlertCircle size={16} />, match: (p) => p.startsWith('/complaints') || p.startsWith('/track-complaint') || p.startsWith('/grievance-management') },
+    { to: '/assistant', label: 'AI Assistant', icon: <Bot size={16} />, match: (p) => p.startsWith('/assistant') },
     { to: '/users', label: 'Users & Roles', icon: <Users size={16} />, match: (p) => p.startsWith('/users') },
     { to: '/settings', label: 'Settings', icon: <Settings size={16} />, match: (p) => p.startsWith('/settings') },
   ];
@@ -92,6 +100,9 @@ const Layout = ({ children }) => {
         </div>
       </main>
 
+      {/* Floating Metrology AI Assistant Widget */}
+      <MetrologyAiAssistant />
+
       {/* Global Developer Quick Role Switcher */}
       <DemoSwitcher />
     </div>
@@ -115,6 +126,11 @@ function App() {
           <Route path="/instruments" element={<ProtectedRoute><Layout><InstrumentsPage /></Layout></ProtectedRoute>} />
           <Route path="/instruments/new" element={<ProtectedRoute><Layout><InstrumentRegistrationForm /></Layout></ProtectedRoute>} />
           <Route path="/verifications" element={<ProtectedRoute><Layout><Verifications /></Layout></ProtectedRoute>} />
+          <Route path="/uncertainty-calculator" element={<ProtectedRoute><Layout><UncertaintyCalculator /></Layout></ProtectedRoute>} />
+          <Route path="/complaints" element={<ProtectedRoute><Layout><GrievancePortal /></Layout></ProtectedRoute>} />
+          <Route path="/track-complaint" element={<ProtectedRoute><Layout><GrievancePortal /></Layout></ProtectedRoute>} />
+          <Route path="/grievance-management" element={<ProtectedRoute><Layout><GrievanceManagement /></Layout></ProtectedRoute>} />
+          <Route path="/assistant" element={<ProtectedRoute><Layout><MetrologyAssistant /></Layout></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute><Layout><UsersPage /></Layout></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Layout><SettingsPage /></Layout></ProtectedRoute>} />
         </Routes>

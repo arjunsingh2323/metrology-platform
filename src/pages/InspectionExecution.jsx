@@ -11,7 +11,8 @@ import {
   ShieldCheck, 
   FileText, 
   Award,
-  Lock
+  Lock,
+  Calculator
 } from 'lucide-react';
 
 const InspectionExecution = () => {
@@ -79,13 +80,25 @@ const InspectionExecution = () => {
   return (
     <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
       {/* Top Action Bar */}
-      <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
+      <div className="flex-between" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
         <button className="btn" onClick={() => navigate('/inspector')} style={{ gap: '0.5rem' }}>
           <ArrowLeft size={16} /> Back to Inspector Queue
         </button>
-        <span className="badge badge-info" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-          <MapPin size={12} /> {instrument?.district || 'Mysuru'} District
-        </span>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <button 
+            type="button" 
+            className="btn" 
+            onClick={() => navigate('/uncertainty-calculator')} 
+            style={{ fontSize: '0.8125rem', gap: '0.375rem', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)' }}
+            title="Open Measurement Uncertainty Budget Calculator"
+          >
+            <Calculator size={14} color="var(--accent-primary)" />
+            <span>Uncertainty Calc</span>
+          </button>
+          <span className="badge badge-info" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <MapPin size={12} /> {instrument?.district || 'Mysuru'} District
+          </span>
+        </div>
       </div>
 
       {submitted ? (

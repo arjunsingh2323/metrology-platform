@@ -54,6 +54,20 @@ const DEMO_PROFILES = [
     badgeClass: 'badge-success',
     icon: <Crown size={18} color="#00d924" />,
     description: 'State Executive Controller'
+  },
+  {
+    id: 'citizen',
+    label: 'Citizen View',
+    name: 'Ananya Sharma',
+    role: 'CITIZEN',
+    district: 'Mysuru',
+    state: 'Karnataka',
+    email: 'ananya.sharma@example.com',
+    uid: 'demo-citizen-uid',
+    route: '/complaints',
+    badgeClass: 'badge-info',
+    icon: <UserCheck size={18} color="#00d4ff" />,
+    description: 'Consumer / Public Complainant'
   }
 ];
 

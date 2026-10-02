@@ -1,5 +1,16 @@
 import React from 'react';
-import { ShieldCheck, AlertTriangle, FileSignature, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { 
+  ShieldCheck, 
+  AlertTriangle, 
+  FileSignature, 
+  Clock, 
+  Calculator, 
+  MessageSquare, 
+  Bot, 
+  ArrowRight,
+  Sparkles
+} from 'lucide-react';
 
 const AdminDashboard = () => {
   const stats = [
@@ -7,6 +18,33 @@ const AdminDashboard = () => {
     { label: 'Pending Verifications', value: '342', icon: Clock, color: 'orange' },
     { label: 'Non-Compliant Entities', value: '28', icon: AlertTriangle, color: 'red' },
     { label: 'Recent Certificates', value: '89', icon: FileSignature, color: 'green' },
+  ];
+
+  const portals = [
+    {
+      title: 'Measurement Uncertainty Calculator',
+      description: 'Evaluate combined standard uncertainty (uc) and expanded uncertainty (U = k · uc) per ISO/IEC Guide 98-3 (GUM).',
+      link: '/uncertainty-calculator',
+      icon: <Calculator size={22} color="var(--accent-primary)" />,
+      badge: 'GUM / ISO 98-3',
+      cta: 'Launch Calculator'
+    },
+    {
+      title: 'Citizen Grievance & Fraud Portal',
+      description: 'Lodge short-weighing reports, track investigation reference IDs, and review officer adjudication dockets.',
+      link: '/complaints',
+      icon: <AlertTriangle size={22} color="#f76b1c" />,
+      badge: 'Public & Inspector',
+      cta: 'Open Grievances'
+    },
+    {
+      title: 'Metrology AI Assistant',
+      description: 'Real-time grounded advisory on the Legal Metrology Act 2009, MPE thresholds, and statutory stamping rules.',
+      link: '/assistant',
+      icon: <Bot size={22} color="#00d924" />,
+      badge: 'OIML & Act 2009',
+      cta: 'Launch Assistant'
+    }
   ];
 
   const recentApplications = [
@@ -27,6 +65,63 @@ const AdminDashboard = () => {
         <button className="btn btn-primary">
           Generate Report
         </button>
+      </div>
+
+      {/* Featured Portals Section */}
+      <div style={{ marginBottom: '2rem' }}>
+        <h2 style={{ fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Sparkles size={18} color="var(--accent-primary)" />
+          New Metrology Modules & Toolsuite
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+          {portals.map((p, idx) => (
+            <div 
+              key={idx} 
+              className="glass-card" 
+              style={{ 
+                padding: '1.5rem', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'space-between',
+                border: '1px solid var(--border-color)',
+                borderRadius: 'var(--radius-lg)',
+                background: 'var(--bg-secondary)'
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-md)', background: 'var(--bg-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {p.icon}
+                  </div>
+                  <span className="badge badge-info" style={{ fontSize: '0.7rem' }}>{p.badge}</span>
+                </div>
+                <h3 style={{ fontSize: '1.125rem', marginBottom: '0.375rem', color: 'var(--text-primary)' }}>
+                  {p.title}
+                </h3>
+                <p className="text-muted" style={{ fontSize: '0.8125rem', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                  {p.description}
+                </p>
+              </div>
+
+              <Link 
+                to={p.link} 
+                className="btn btn-primary" 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  gap: '0.5rem', 
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  padding: '0.625rem 1rem'
+                }}
+              >
+                <span>{p.cta}</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="dashboard-grid">

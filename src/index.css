@@ -131,12 +131,20 @@ button {
   gap: 0.25rem;
   flex: 1;
   justify-content: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 0.5rem;
+}
+
+.navbar-links::-webkit-scrollbar {
+  display: none;
 }
 
 .navbar-link {
   position: relative;
-  padding: 0.375rem 0.875rem;
-  font-size: 1.1rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-secondary);
   border-radius: var(--radius-full);
